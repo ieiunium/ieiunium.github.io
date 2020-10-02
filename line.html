@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="1280" height="720" style="border:1px solid #d3d3d3;">
+<canvas id="myCanvas" width="1280" height="1280" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML canvas tag.</canvas>
 
 <script>
@@ -14,10 +14,14 @@ var url_string = window.location.href
 var url = new URL(url_string);
 inputString = url.searchParams.get("s");
 editedString = (inputString + " ").repeat(100)
+//context.translate(10, 10);
 
 setInterval(function(){
-    ctx.clearRect(0, 0, 1280, 720);
-    ctx.fillText(editedString, x, 360);
+    ctx.clearRect(0, 0, 1280, 1280);
+    ctx.fillText(editedString, x, 200);
+    ctx.rotate(Math.PI/2);
+    ctx.fillText(editedString, x, -100);
+    ctx.rotate(-Math.PI/2);
     x = (x - 10);
     if(x < -2000){
         x = 0
