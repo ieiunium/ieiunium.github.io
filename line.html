@@ -2,10 +2,38 @@
 <html>
 <body>
 
+vertical <input type="checkbox" id="isVertical" value="true"><br>
+text <input type="text" id="inputText"><br>
+dt <input type="number" id="dt" name="dt" min="0" max="1000"><br>
+dx <input type="number" id="dx" name="dx" min="-100" max="100"><br>
+<a id="updateLink" href="./index.html">update</a><br>
 <canvas id="myCanvas" width="1280" height="1280" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML canvas tag.</canvas>
 
 <script>
+document.getElementById('updateLink').href = new URL(window.location.href);
+
+updateLinkFun = function() {
+    var s1 = document.getElementById("inputText").value
+    var v1 = document.getElementById("isVertical").checked ? 1 : 0
+    var x1 = document.getElementById("dx").value
+    var t1 = document.getElementById("dt").value
+    console.log(s1)
+    console.log(v1)
+    console.log(x1)
+    console.log(t1)
+    document.getElementById('updateLink').href = new URL(window.location.href).pathname + "?s=" + s1 + "&v=" + v1 + "&x=" + x1 + "&t=" + t1;
+};
+var input1 = document.getElementById("isVertical");
+var input2 = document.getElementById("inputText");
+var input3 = document.getElementById("dt");
+var input4 = document.getElementById("dx");
+input1.oninput = updateLinkFun
+input2.oninput = updateLinkFun
+input3.oninput = updateLinkFun
+input4.oninput = updateLinkFun
+
+
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 ctx.font = "144px Arial";
@@ -13,20 +41,38 @@ x = 0
 var url_string = window.location.href
 var url = new URL(url_string);
 inputString = url.searchParams.get("s");
+isVertical = parseInt(url.searchParams.get("v"));
+dt = parseInt(url.searchParams.get("t"));
+dx = parseInt(url.searchParams.get("x"));
+isVertical = isNaN(isVertical)? 0 : isVertical
+dt = isNaN(dt)? 1 : dt
+dx = isNaN(dx)? 1 : dx
+
+document.getElementById("isVertical").checked = isVertical;
+document.getElementById("inputText").value = inputString;
+document.getElementById("dt").value = dt;
+document.getElementById("dx").value = dx;
+/*console.log(inputString)
+console.log(isVertical)
+console.log(dt)
+console.log(dx)*/
 editedString = (inputString + " ").repeat(100)
 //context.translate(10, 10);
 
 setInterval(function(){
     ctx.clearRect(0, 0, 1280, 1280);
-    ctx.fillText(editedString, x, 200);
-    ctx.rotate(Math.PI/2);
-    ctx.fillText(editedString, x, -100);
-    ctx.rotate(-Math.PI/2);
-    x = (x - 10);
+    if(isVertical) {
+        ctx.rotate(Math.PI/2);
+        ctx.fillText(editedString, x, -100);
+        ctx.rotate(-Math.PI/2);
+    } else {
+        ctx.fillText(editedString, x, 200);
+    }
+    x = (x - dx);
     if(x < -2000){
         x = 0
     }
-},40);
+},dt);
 
 </script>
 
